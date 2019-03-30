@@ -96,7 +96,7 @@ export default {
         HP_Hero:0,
       },
       weaponOfindex:[1,0,0],
-      skillOfindex:[1,0,0],
+      skillOfindex:[1,1,1],
       log:[],
       BatInf:'开始战斗',
       level:3,
@@ -138,32 +138,7 @@ export default {
     this.initUser()
   },
   methods:{
-    tableRowClassName({row, rowIndex}) {
-        
-        // console.log(this.weaponOfindex[rowIndex])
-
-        
-        if (this.weaponOfindex[rowIndex] === 0) {
-          return 'warning-row';
-        }
-        // } else if (rowIndex === 3) {
-        //   return 'success-row';
-        // }
-        return '';
-      },
-       tableRowClassName1({row, rowIndex}) {
-        
-        // console.log(this.weaponOfindex[rowIndex])
-
-        
-        if (this.skillOfindex[rowIndex] === 0) {
-          return 'warning-row';
-        }
-        // } else if (rowIndex === 3) {
-        //   return 'success-row';
-        // }
-        return '';
-      },
+   
     initUser()
     {
         console.log('初始化')
@@ -179,7 +154,9 @@ export default {
           that.attackByMonster = response.data[1].attack
           that.weaponOfindex = response.data[0].equipments
           that.skillOfindex = response.data[0].skills
-
+           
+          // this.tableRowClassName()
+          // this.tableRowClassName1()
           // console.log(that.weaponOfindex[0])
           // console.log(that.skillOfindex )
       }).catch(function (error) {
@@ -213,11 +190,12 @@ export default {
           that.Mon.HP_Mon = response.data[1].hp
           that.Mon.Mon_name = response.data[1].name
           that.attackByMonster = response.data[1].attack 
-          
+          that.weaponOfindex = response.data[0].equipments
+          that.skillOfindex = response.data[0].skills
           
           // var id = that.log.length
           var str1 = "虞大叶使用  " + that.useSkillName +"  攻击  "+ that.Mon.Mon_name + " 造成 "+response.data[2].monsterBloodLose +" 伤害" + '\n'
-          var str =  "    与此同时  "+that.Mon.Mon_name+"  使用  " +that.useSkillName +"  攻击虞大叶造成  "+response.data[2].heroBloodLose +" 伤害" + '\n'
+          var str =  "    与此同时  "+that.Mon.Mon_name+"   攻击虞大叶造成  "+response.data[2].heroBloodLose +" 伤害" + '\n'
           
           var item = {id:that.log.length +1,inf:str1}
           var item1 = {id:that.log.length +2,inf:str}
@@ -227,13 +205,13 @@ export default {
           if(response.data[2].over)
              that.$notify({
           title: '战斗',
-          message: '战斗结束，请开始第二关',
+          message: '战斗结束，请开始下一关',
           type: 'warning'
         });
           
       }).catch(function (error) {
         console.log(error)
-        that.$message('出手失败')
+        // that.$message('出手失败')
       })
       
       this.$refs.multipleTable.clearSelection();
@@ -271,11 +249,38 @@ export default {
           that.attackByMonster = response.data[1].attack
           that.weaponOfindex = response.data[0].equipments
           that.skillOfindex = response.data[0].skills
+
       }).catch(function (error) {
         console.log(error)
-        that.$message('出手失败')
+        // that.$message('出手失败')
       })
     },
+     tableRowClassName({row, rowIndex}) {
+        
+        // console.log(this.weaponOfindex[rowIndex])
+        console.log("武器状态："+this.weaponOfindex)
+        
+        if (this.weaponOfindex[rowIndex] === 0) {
+          return 'warning-row';
+        }
+        // } else if (rowIndex === 3) {
+        //   return 'success-row';
+        // }
+        return '';
+      },
+       tableRowClassName1({row, rowIndex}) {
+        
+        // console.log(this.weaponOfindex[rowIndex])
+        console.log("技能状态："+this.skillOfindex)
+        
+        if (this.skillOfindex[rowIndex] === 0) {
+          return 'warning-row';
+        }
+        // } else if (rowIndex === 3) {
+        //   return 'success-row';
+        // }
+        return '';
+      },
     handleSelectionChange(val) {
       
         this.multipleSelection = val;
